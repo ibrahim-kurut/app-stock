@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
     # My App
     'account',
+    'stock_app',
 ]
 
 MIDDLEWARE = [
