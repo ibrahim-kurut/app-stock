@@ -11,12 +11,18 @@ class BrandSerializer(serializers.ModelSerializer):
         model = Brand
         fields = '__all__'
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.ModelSerializer): 
+    # To calculate the count of products
+    count_products = serializers.SerializerMethodField()
+    # Show products associated with this category
     products = ProductSerializer(many=True, read_only=True)
 
     class Meta:
         model = Category
         fields = '__all__'
+    # to calculate the count of products related to the category
+    def get_count_products(self, obj):
+        return Product.objects.filter(category=obj).count()
 
 class FirmSerializer(serializers.ModelSerializer):
     class Meta:
