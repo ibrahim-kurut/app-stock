@@ -1,5 +1,5 @@
 from rest_framework import viewsets
-
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Category, Brand, Product, Firm, Purchases, Sales
@@ -8,6 +8,11 @@ from .serializers import CategorySerializer, BrandSerializer, ProductSerializer,
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
+ # If the user does not work Login, it cannot do the following ['POST', 'PUT', 'PATCH', 'DELETE']
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+            return [IsAuthenticated()]
+        return []
 
   
 
