@@ -37,6 +37,11 @@ class FirmViewSet(viewsets.ModelViewSet):
     queryset = Firm.objects.all()
     serializer_class = FirmSerializer
 
+    def get_permissions(self):
+        if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
+            return [IsAuthenticated()]
+        return []
+
  
 
 class PurchasesViewSet(viewsets.ModelViewSet):
