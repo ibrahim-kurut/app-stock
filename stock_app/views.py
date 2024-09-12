@@ -17,17 +17,17 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return []
 
 
-    # إضافة فلاتر البحث إلى الواجهة
-    filter_backends = [filters.SearchFilter, filters.OrderingFilter]  # دعم البحث والفلترة
-    search_fields = ['name']  # حقل الاسم للبحث
+   # Add search filters to the interface
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter] # Research and filtering support
+    search_fields = ['name'] # Field of the name to search
     
     def get_queryset(self):
-        # التحقق من وجود فلتر للاسم في طلب المستخدم
+        # Check for a filter for the name in the user's request
         name = self.request.query_params.get('name', None)
         if name:
-            # فلترة الفئات بناءً على الاسم إذا تم توفيره
+            # Fladdat Categories based on the name if it is provided
             return Category.objects.filter(name__icontains=name)
-        return super().get_queryset()  # استرجاع جميع الفئات إذا لم يتم توفير فلتر
+        return super().get_queryset()  # Recover all categories if a filter is not provided
 
   
 
