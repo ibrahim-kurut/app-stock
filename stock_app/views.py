@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from .models import Category, Brand, Product, Firm, Purchases, Sales
 from .serializers import CategorySerializer, BrandSerializer, ProductSerializer, FirmSerializer, PurchasesSerializer, SalesSerializer
 
+from rest_framework import filters
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -13,6 +15,18 @@ class CategoryViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return [IsAuthenticated()]
         return []
+
+# Add search filters to the interface
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter] # Research and filtering support
+    search_fields = ['name'] # Field of the name to search
+    
+    def get_queryset(self):
+        # Check for a filter for the name in the user's request
+        name = self.request.query_params.get('name', None)
+        if name:
+            # Fladdat Categories based on the name if it is provided
+            return Category.objects.filter(name__icontains=name)
+        return super().get_queryset()  # Recover all categories if a filter is not provided
 
 
 
