@@ -5,6 +5,8 @@ from rest_framework.response import Response
 from .models import Category, Brand, Product, Firm, Purchases, Sales
 from .serializers import CategorySerializer, BrandSerializer, ProductSerializer, FirmSerializer, PurchasesSerializer, SalesSerializer
 
+from rest_framework import filters
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -13,6 +15,19 @@ class CategoryViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return [IsAuthenticated()]
         return []
+
+
+    # إضافة فلاتر البحث إلى الواجهة
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]  # دعم البحث والفلترة
+    search_fields = ['name']  # حقل الاسم للبحث
+    
+    def get_queryset(self):
+        # التحقق من وجود فلتر للاسم في طلب المستخدم
+        name = self.request.query_params.get('name', None)
+        if name:
+            # فلترة الفئات بناءً على الاسم إذا تم توفيره
+            return Category.objects.filter(name__icontains=name)
+        return super().get_queryset()  # استرجاع جميع الفئات إذا لم يتم توفير فلتر
 
   
 
