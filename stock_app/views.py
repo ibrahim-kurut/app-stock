@@ -60,6 +60,14 @@ class ProductViewSet(viewsets.ModelViewSet):
             return [IsAuthenticated()]
         return []
 
+
+    # Add the search filter to the Product
+    filter_backends = [filters.SearchFilter]  
+    search_fields = ['name'] # Search will be based on the name field in the Product model
+
+    def get_queryset(self):
+        return super().get_queryset()
+
  
 
 class FirmViewSet(viewsets.ModelViewSet):
