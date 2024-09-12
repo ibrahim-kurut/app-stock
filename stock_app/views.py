@@ -42,6 +42,13 @@ class BrandViewSet(viewsets.ModelViewSet):
             return [IsAuthenticated()]
         return []
 
+    # Add the search filter to the Brand
+    filter_backends = [filters.SearchFilter]  
+    search_fields = ['name'] # Search will be based on the name field in the brand model
+
+    def get_queryset(self):
+        return super().get_queryset()
+
  
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -63,6 +70,13 @@ class FirmViewSet(viewsets.ModelViewSet):
         if self.request.method in ['POST', 'PUT', 'PATCH', 'DELETE']:
             return [IsAuthenticated()]
         return []
+    
+    # Add the search filter to the Firm
+    filter_backends = [filters.SearchFilter]  
+    search_fields = ['name'] # Search will be based on the name field in the Firm model
+
+    def get_queryset(self):
+        return super().get_queryset()
 
  
 
